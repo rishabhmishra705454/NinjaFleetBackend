@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: your-actual-app-name  # Ensure this is correct
+  AZURE_WEBAPP_NAME: 'ninjafleet'  # Ensure this is correct
   AZURE_WEBAPP_PACKAGE_PATH: '.'           # Keep this unless the app is in a subdirectory
   NODE_VERSION: '20.x'                     # Node.js version
 
