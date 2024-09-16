@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: 'ninjafleet'  # Ensure this is correct
-  AZURE_WEBAPP_PACKAGE_PATH: '.'           # Keep this unless the app is in a subdirectory
-  NODE_VERSION: '20.x'                     # Node.js version
+  AZURE_WEBAPP_NAME: ninjafleet  # Your actual app name
+  AZURE_WEBAPP_PACKAGE_PATH: '.' # Path to the app, if in a subdirectory, change this accordingly
+  NODE_VERSION: '20.x'           # Node.js version
 
 permissions:
   contents: read
@@ -27,7 +27,7 @@ jobs:
       run: |
         npm install
         npm run build --if-present
-        # npm run test --if-present # Uncomment if you add a test script
+        # npm run test --if-present # Uncomment if you have a test script
 
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v3
@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     environment:
-      name: 'Development'
+      name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
@@ -55,5 +55,5 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}  # Make sure this secret is correctly set
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
