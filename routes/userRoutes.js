@@ -7,7 +7,11 @@ const authenticateToken = require('../middleware/authMiddleware');
 // Route for logging in
 router.post('/login', userController.login);
 
-// Route for registering a user (no authentication required)
-router.post('/register', upload.single('aadharPhoto'), userController.registerUser);
+// Route for user registration with two image uploads (Aadhaar Front and Back)
+router.post('/register', upload.fields([
+    { name: 'aadharFront', maxCount: 1 }, // Aadhaar front image field
+    { name: 'aadharBack', maxCount: 1 }   // Aadhaar back image field
+  ]), userController.registerUser);
+  
 
 module.exports = router;

@@ -2,11 +2,6 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../config/sequelize');
 
 const User = sequelize.define('User', {
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true
-  },
   farmerName: {
     type: DataTypes.STRING,
     allowNull: false
@@ -18,11 +13,13 @@ const User = sequelize.define('User', {
   },
   aadharNo: {
     type: DataTypes.STRING,
-    allowNull: false,
-    unique: true
+    allowNull: false
   },
-  aadharPhoto: {
-    type: DataTypes.STRING // Path to the Aadhaar photo
+  aadharFront: {
+    type: DataTypes.STRING, // Path to Aadhaar front image
+  },
+  aadharBack: {
+    type: DataTypes.STRING, // Path to Aadhaar back image
   },
   address: {
     type: DataTypes.STRING,
@@ -36,8 +33,6 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: false
   }
-}, {
-  timestamps: true 
 });
 
 module.exports = User;
