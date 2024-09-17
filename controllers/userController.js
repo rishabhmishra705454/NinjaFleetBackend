@@ -37,11 +37,13 @@ exports.login = async (req, res) => {
     sendResponse(res, 500, null, err.message);
   }
 };
-
 // Register function
 exports.registerUser = async (req, res) => {
   const { farmerName, mobileNo, aadharNo, address, totalLand, landType } = req.body;
-  const aadharPhoto = req.file ? req.file.path : null;
+  
+  // Retrieve the files for Aadhaar front and back
+  const aadharFront = req.files['aadharFront'] ? req.files['aadharFront'][0].path : null;
+  const aadharBack = req.files['aadharBack'] ? req.files['aadharBack'][0].path : null;
 
   try {
     // Check if user already exists
@@ -55,7 +57,8 @@ exports.registerUser = async (req, res) => {
       farmerName,
       mobileNo,
       aadharNo,
-      aadharPhoto,
+      aadharFront, // Store the Aadhaar front image
+      aadharBack,  // Store the Aadhaar back image
       address,
       totalLand,
       landType
