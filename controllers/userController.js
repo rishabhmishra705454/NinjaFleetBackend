@@ -64,13 +64,16 @@ exports.registerUser = async (req, res) => {
       landType
     });
 
+    // Generate JWT token after registration
     const token = jwt.sign({ id: newUser.id, mobileNo: newUser.mobileNo }, jwtSecret, { expiresIn: jwtExpiresIn });
-    sendResponse(res, 201, {
+
+    // Return the user data and token in the response
+    return sendResponse(res, 201, {
       token,
       user: newUser
     }, 'User registered successfully.');
-    sendResponse(res, 201, newUser, 'User registered successfully.');
   } catch (err) {
-    sendResponse(res, 500, null, err.message);
+    // Catch and send error if something goes wrong
+    return sendResponse(res, 500, null, err.message);
   }
 };
