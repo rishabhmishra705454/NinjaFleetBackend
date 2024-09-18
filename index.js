@@ -2,7 +2,7 @@ const express = require('express');
 const sequelize = require('./config/sequelize');
 const userRoutes = require('./routes/userRoutes');
 const app = express();
-const port = 3000;
+const port = 8080;
 
 app.use(express.json());
 // Serve uploaded files
