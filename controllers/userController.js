@@ -2,6 +2,8 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const { jwtSecret, jwtExpiresIn } = require('../config/jwtConfig');
 const sendResponse = require('../utils/responseFormatter');
+const { Op } = require('sequelize');
+
 
 // Login function
 exports.login = async (req, res) => {
@@ -72,6 +74,88 @@ exports.registerUser = async (req, res) => {
       token,
       user: newUser
     }, 'User registered successfully.');
+  } catch (err) {
+    // Catch and send error if something goes wrong
+    return sendResponse(res, 500, null, err.message);
+  }
+};
+
+exports.getAllUsers = async (req, res) => {
+  // Retrieve page, limit, and search query from query parameters
+  const page = parseInt(req.query.page) || 1; // default to page 1
+  const limit = parseInt(req.query.limit) || 10; // default to 10 items per page
+  const searchQuery = req.query.search || ''; // get search query, default to empty string
+
+  // Calculate the offset based on page and limit
+  const offset = (page - 1) * limit;
+
+  try {
+    // Build the where clause for searching
+    const whereClause = {
+      [Op.or]: [
+        { farmerName: { [Op.like]: `%${searchQuery}%` } }, // Use LIKE for MySQL
+        { mobileNo: { [Op.like]: `%${searchQuery}%` } },
+        { aadharNo: { [Op.like]: `%${searchQuery}%` } },
+        { address: { [Op.like]: `%${searchQuery}%` } }
+      ]
+    };
+
+    // Fetch users with pagination and search using limit, offset, and where clause
+    const { rows: users, count: totalUsers } = await User.findAndCountAll({
+      where: whereClause,
+      limit,
+      offset,
+      attributes: [
+        'id', 
+        'farmerName', 
+        'mobileNo', 
+        'aadharNo', 
+        'aadharFront', 
+        'aadharBack', 
+        'address', 
+        'totalLand', 
+        'landType'
+      ]
+    });
+
+    if (!users.length) {
+      return sendResponse(res, 404, null, 'No users found.');
+    }
+
+    // Return paginated result and meta information (total users, current page, total pages)
+    const totalPages = Math.ceil(totalUsers / limit);
+
+    return sendResponse(res, 200, {
+      users,
+      meta: {
+        totalUsers,
+        currentPage: page,
+        totalPages
+      }
+    }, 'Users retrieved successfully.');
+  } catch (err) {
+    // Catch and send error if something goes wrong
+    return sendResponse(res, 500, null, err.message);
+  }
+};
+
+// Delete user function (Admin only)
+exports.deleteUser = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    // Check if the user exists
+    const user = await User.findByPk(userId);
+
+    if (!user) {
+      return sendResponse(res, 404, null, 'User not found.');
+    }
+
+    // Delete the user
+    await user.destroy();
+
+    // Send response after deletion
+    return sendResponse(res, 200, null, 'User deleted successfully.');
   } catch (err) {
     // Catch and send error if something goes wrong
     return sendResponse(res, 500, null, err.message);
