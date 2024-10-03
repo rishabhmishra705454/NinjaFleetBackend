@@ -4,6 +4,8 @@ const userRoutes = require('./routes/userRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const providerRoutes = require('./routes/providerRoutes');
 const machinaryRoutes = require('./routes/machinaryRoutes');
+const bookingRoutes = require('./routes/bookingRoutes');
+
 
 const app = express();
 const port = 8080;
@@ -18,6 +20,7 @@ app.use('/api', userRoutes);
 app.use('/api', adminRoutes);
 app.use('/api',providerRoutes);
 app.use('/api',machinaryRoutes);
+app.use('/api',bookingRoutes);
 
 sequelize.authenticate().then(() => {
   console.log('Connection has been established successfully.');
