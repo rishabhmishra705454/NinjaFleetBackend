@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/sequelize');
+const Category = require('./category'); // Import the Category model
 
 const Machinery = sequelize.define('Machinery', {
   providerId: {
@@ -15,9 +16,14 @@ const Machinery = sequelize.define('Machinery', {
     type: DataTypes.STRING,
     allowNull: false
   },
-  category: {
-    type: DataTypes.STRING,
-    allowNull: false // E.g., Tractor, Harvester
+  categoryId: {
+    type: DataTypes.INTEGER,
+    allowNull: true, // Make categoryId nullable
+    references: {
+      model: 'Categories',
+      key: 'id',
+    },
+    onDelete: 'SET NULL' // If a category is deleted, set categoryId to null
   },
   model: {
     type: DataTypes.STRING, // Manufacturer and model of the machinery
@@ -94,5 +100,8 @@ const Machinery = sequelize.define('Machinery', {
 }, {
   timestamps: true // Adds createdAt and updatedAt fields
 });
+
+// Define the association between Machinery and Category
+Machinery.belongsTo(Category, { foreignKey: 'categoryId', as: 'category' });
 
 module.exports = Machinery;

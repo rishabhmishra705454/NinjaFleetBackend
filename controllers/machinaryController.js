@@ -4,7 +4,7 @@ const sendResponse = require('../utils/responseFormatter');
 // Register Machinery
 exports.registerMachinery = async (req, res) => {
   const {
-    providerId, machineryName, category, model, capacity, condition,
+    providerId, machineryName, categoryId, model, capacity, condition,
     fuelType, pricing, availabilityStart, availabilityEnd,
     latitude, longitude, maintenanceSchedule, lastServiceDate,
     insuranceStatus, usageRestrictions, availableDays, insuranceExpiry, operatorRequired
@@ -18,7 +18,7 @@ exports.registerMachinery = async (req, res) => {
     }
 
     const newMachinery = await Machinery.create({
-      providerId, machineryName, category, model, capacity, condition,
+      providerId, machineryName, categoryId, model, capacity, condition,
       fuelType, pricing, availabilityStart, availabilityEnd,
       latitude, longitude, images, maintenanceSchedule, lastServiceDate,
       insuranceStatus, usageRestrictions, availableDays, insuranceExpiry, operatorRequired
@@ -33,6 +33,7 @@ exports.registerMachinery = async (req, res) => {
     return sendResponse(res, 500, null, 'An error occurred while registering the machinery: ' + err.message);
   }
 };
+
 
 // Get Machinery by ID
 exports.getMachineryById = async (req, res) => {
@@ -55,7 +56,7 @@ exports.getMachineryById = async (req, res) => {
 exports.updateMachinery = async (req, res) => {
   const { id } = req.params;
   const {
-    providerId, machineryName, category, model, capacity, condition,
+    providerId, machineryName, categoryId, model, capacity, condition,
     fuelType, pricing, availabilityStart, availabilityEnd,
     latitude, longitude, maintenanceSchedule, lastServiceDate,
     insuranceStatus, usageRestrictions, availableDays, insuranceExpiry, operatorRequired
@@ -76,7 +77,7 @@ exports.updateMachinery = async (req, res) => {
 
     // Update machinery details
     await machinery.update({
-      providerId, machineryName, category, model, capacity, condition,
+      providerId, machineryName, categoryId, model, capacity, condition,
       fuelType, pricing, availabilityStart, availabilityEnd,
       latitude, longitude, images, maintenanceSchedule, lastServiceDate,
       insuranceStatus, usageRestrictions, availableDays, insuranceExpiry, operatorRequired

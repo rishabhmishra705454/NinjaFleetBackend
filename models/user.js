@@ -16,10 +16,10 @@ const User = sequelize.define('User', {
     allowNull: false
   },
   aadharFront: {
-    type: DataTypes.STRING, // Path to Aadhaar front image
+    type: DataTypes.STRING, 
   },
   aadharBack: {
-    type: DataTypes.STRING, // Path to Aadhaar back image
+    type: DataTypes.STRING, 
   },
   address: {
     type: DataTypes.STRING,
@@ -32,7 +32,22 @@ const User = sequelize.define('User', {
   landType: {
     type: DataTypes.STRING,
     allowNull: false
-  }
+  },
+  isActive: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true
+  },
+  isLogin: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  
+  },
+  fcmToken: {
+    type: DataTypes.STRING, 
+    allowNull: true
+  },
+}, {
+  timestamps: true
 });
 
 module.exports = User;

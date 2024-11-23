@@ -13,5 +13,7 @@ router.post('/register', upload.fields([
     { name: 'aadharBack', maxCount: 1 }   // Aadhaar back image field
   ]), userController.registerUser);
   
-
+// Route for getting user profile by ID
+router.get('/profile/:userId', authenticateToken, userController.getUserProfile);
 module.exports = router;
+

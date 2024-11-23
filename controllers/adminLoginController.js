@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Admin = require('../models/admin');
 const sendResponse = require('../utils/responseFormatter');
+const { jwtSecret, jwtExpiresIn } = require('../config/jwtConfig');
 
 // Admin login
 exports.adminLogin = async (req, res) => {
@@ -23,11 +24,10 @@ exports.adminLogin = async (req, res) => {
 
     // Generate token
     const token = jwt.sign(
-      { id: admin.id, username: admin.username, role: 'admin' },
-      "admintoken",
-      { expiresIn: '1h' }
+      { username: admin.username, role: 'admin' },
+      jwtSecret, { expiresIn: jwtExpiresIn }
     );
-
+   
     sendResponse(res, 200, { token ,admin }, 'Login successful.');
   } catch (err) {
     sendResponse(res, 500, null, 'An error occurred during login: ' + err.message);

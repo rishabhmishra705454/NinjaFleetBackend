@@ -32,7 +32,9 @@ exports.login = async (req, res) => {
         aadharPhoto: user.aadharPhoto,
         address: user.address,
         totalLand: user.totalLand,
-        landType: user.landType
+        landType: user.landType,
+        isActive: user.isActive,
+        fcmToken: user.fcmToken,
       }
     }, 'Login successful');
   } catch (err) {
@@ -41,7 +43,7 @@ exports.login = async (req, res) => {
 };
 // Register function
 exports.registerUser = async (req, res) => {
-  const { farmerName, mobileNo, aadharNo, address, totalLand, landType } = req.body;
+  const { farmerName, mobileNo, aadharNo, address, totalLand, landType,fcmToken,isLogin } = req.body;
   
   // Retrieve the files for Aadhaar front and back
   const aadharFront = req.files['aadharFront'] ? req.files['aadharFront'][0].path : null;
@@ -63,7 +65,9 @@ exports.registerUser = async (req, res) => {
       aadharBack,  // Store the Aadhaar back image
       address,
       totalLand,
-      landType
+      landType,
+      fcmToken,
+      isLogin 
     });
 
     // Generate JWT token after registration
@@ -114,7 +118,11 @@ exports.getAllUsers = async (req, res) => {
         'aadharBack', 
         'address', 
         'totalLand', 
-        'landType'
+        'landType',
+        'isActive',
+        'fcmToken',
+        'isLogin'
+
       ]
     });
 
@@ -156,6 +164,37 @@ exports.deleteUser = async (req, res) => {
 
     // Send response after deletion
     return sendResponse(res, 200, null, 'User deleted successfully.');
+  } catch (err) {
+    // Catch and send error if something goes wrong
+    return sendResponse(res, 500, null, err.message);
+  }
+};
+
+// Get user profile function
+exports.getUserProfile = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    // Find the user by ID
+    const user = await User.findByPk(userId);
+
+    if (!user) {
+      return sendResponse(res, 404, null, 'User not found.');
+    }
+
+    // Return the user profile
+    return sendResponse(res, 200, {
+      id: user.id,
+      farmerName: user.farmerName,
+      mobileNo: user.mobileNo,
+      aadharNo: user.aadharNo,
+      address: user.address,
+      totalLand: user.totalLand,
+      landType: user.landType,
+      isActive: user.isActive,
+      fcmToken: user.fcmToken,
+      isLogin: user.isLogin
+    }, 'User profile retrieved successfully.');
   } catch (err) {
     // Catch and send error if something goes wrong
     return sendResponse(res, 500, null, err.message);
