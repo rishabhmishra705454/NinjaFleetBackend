@@ -9,7 +9,7 @@ const categoryRoutes = require('./routes/categoryRoutes');
 const landAddressRoutes = require('./routes/landAddressRoutes');
 
 const app = express();
-const port = 3003;
+const port = 8080;
 const cors = require('cors');
 app.use(cors());
 app.use(express.json());
