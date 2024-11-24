@@ -9,7 +9,7 @@ const categoryRoutes = require('./routes/categoryRoutes');
 const landAddressRoutes = require('./routes/landAddressRoutes');
 
 const app = express();
-const port = 8080;
+const port = 3003;
 const cors = require('cors');
 app.use(cors());
 app.use(express.json());
@@ -30,7 +30,7 @@ sequelize.authenticate().then(() => {
 }).catch((error) => {
   console.error('Unable to connect to the database: ', error);
 });
-sequelize.sync({ force: true });
+sequelize.sync();
 
 app.get('/', (req, res) => {
   res.send('I am breathing');
