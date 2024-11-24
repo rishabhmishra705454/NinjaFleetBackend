@@ -7,7 +7,7 @@ const userController = require('../controllers/userController');
 
 const verifyAdminToken = require('../middleware/adminMiddleware');
 // Route to get all users (Admin only)
-router.get('/admin/users',verifyAdminToken, userController.getAllUsers);
+router.get('/admin/users', userController.getAllUsers);
 
 // Route to delete a user by ID (Admin only)
 router.delete('/admin/users/:userId', userController.deleteUser);
